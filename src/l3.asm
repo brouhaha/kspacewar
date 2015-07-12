@@ -19,8 +19,6 @@ tick	equ	3fh
 	jmp	cent	;clock handler
 	org	tick
 	db	0
-	org	kdcod
-	dw	kbdum	;dummy kb decoder
 	org	estrt
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,6 +94,3 @@ noteq:	dad	d	;hl=hl+5
 endl:	dcr	c	;decrement task cnt
 	jnz	eloop	;test next task
 	ret		;return to handler
-;
-kbdum:	ret		;dummy kb decoder
-	end
