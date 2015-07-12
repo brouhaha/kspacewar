@@ -1,1 +1,4 @@
 Space War for the 8080 by Dave Kruglinski from October 1977 _BYTE_ magazine
+
+Modified to assemble with AS macro assembler:
+    http://john.ccac.rwth-aachen.de:8000/as/

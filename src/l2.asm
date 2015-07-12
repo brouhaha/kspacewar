@@ -29,21 +29,21 @@ svec	macro
 	db	6
 	endm
 sv	macro	len,dir
-	db	dir or (len shl 4)
+	db	dir | (len << 4)
 	endm
 svf	macro	len,dir
-	db	dir or (len shl 4) or 8h
+	db	dir | (len << 4) | 8h
 	endm
 sve	macro	len,dir
-	db	dir or (len shl 4) or 80h
+	db	dir | (len << 4) | 80h
 	endm
 svef	macro	len,dir
-	db	dur or (len shl 4) or 88h
+	db	dir | (len << 4) | 88h
 	endm;
 ;
 param	macro	scl,orn
 	db	8
-	db	orn or (scl shl 4)
+	db	orn | (scl << 4)
 	endm
 ;
 jump	macro	addr

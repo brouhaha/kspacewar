@@ -6,7 +6,7 @@ stack	equ	0ffh	;stack addr
 cintc	equ	0fffbh	;rtc control address
 gstrt	equ	100h	;start address
 kintc	equ	0ffc0h	;kbrd int control addr
-time	equ	3fh	;system time
+tick	equ	3fh	;system time
 top	equ	40h	;display file start addr
 xyout	equ	0fffch	;crt output addr
 	org	gstrt
@@ -232,7 +232,7 @@ sync:	lhld	pntr	;bump pointer
 	mvi	h,80h	;beam to screen center
 	mvi	l,80h
 	shld	xyout
-	lxi	h,time
+	lxi	h,tick
 	mov	a,m	;old time in a
 sloop:	cmp	m	;old = new?
 	jz	sloop	;yes - keep trying

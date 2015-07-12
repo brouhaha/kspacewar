@@ -9,7 +9,7 @@ astrt	equ	500h	;load address
 badr1	equ	0fffeh	;button read address
 sun	equ	7	;collision rad of sun
 intvl	equ	18h	;duration of explosion
-epsln	equ	8h	;collsiion rad of torpedos
+eplsn	equ	8h	;collsiion rad of torpedos
 acon	equ	8	;acceleration constant
 rmax	equ	12	;torpedo timeout
 vcon	equ	300h	;torpedo relative velocity
@@ -43,21 +43,21 @@ svec	macro
 	db	6
 	endm
 sv	macro	len,dir
-	db	dir or (len shl 4)
+	db	dir | (len << 4)
 	endm
 svf	macro	len,dir
-	db	dir or (len shl 4) or 8h
+	db	dir | (len << 4) | 8h
 	endm
 sve	macro	len,dir
-	db	dir or (len shl 4) or 80h
+	db	dir | (len << 4) | 80h
 	endm
 svef	macro	len,dir
-	db	dur or (len shl 4) or 88h
+	db	dir | (len << 4) | 88h
 	endm;
 ;
 param	macro	scl,orn
 	db	8
-	db	orn or (scl shl 4)
+	db	orn | (scl << 4)
 	endm
 ;
 jump	macro	addr
@@ -155,7 +155,7 @@ pos:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; linkage between system and application
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-time	equ	3fh
+tick	equ	3fh
 nums	equ	46h
 	org	40h
 	dw	start	;display file
@@ -447,7 +447,7 @@ cwm	set	2ch
 ccwm	set	2dh
 hypm	set	32h	;hyperspace mask
 finh	set	2eh
-bapnt	ste	30h
+bapnt	set	30h
 acon1	equ	(5*acon)/7
 sfly:	scall	0	;move ship/explo
 	scall	1	;accelerate
@@ -529,7 +529,7 @@ nrtst:	loadx	a,dc+1	;ho x pos of torpedo
 	loadx	a,dc+7	;ho y pos of torpedo
 	sub	e	;subt ship pos
 	abs
-	cpi	epsln
+	cpi	eplsn
 	jm	hit	;both close enough
 nxbul:	ldblx	nbpnt	;next torpedo pntr
 	sub	a	;zer a
@@ -557,7 +557,7 @@ dstry:	ldblx	scpnt	;restore score addr
 ;  sched ship start
 	ldblx	pepnt	;ship entry addr
 	mvi	m,-1	;mask = -1
-	lda	time
+	lda	tick
 	adi	intvl
 	inx	h
 	mov	m,a	;time+intval to pl st
@@ -572,17 +572,17 @@ dstry:	ldblx	scpnt	;restore score addr
 swapx:	ldblx	xn	;swap x coords
 	xchg
 	ldblx	xnm
-	sdblk	xn
+	sdblx	xn
 	xchg
-	sdblk	xnm
+	sdblx	xnm
 	ret
 ;
 swapy:	ldblx	yn	;swap y coords
 	xchg
 	ldblx	ynm
-	sdblk	yn
+	sdblx	yn
 	xchg
-	sdblk	ynm
+	sdblx	ynm
 	ret
 ;
 ;  acceleration table
@@ -631,7 +631,7 @@ blank:	ldblx	inpnt	;mbeam/mdisp inst
 ; torpedo fire program
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 gepnt	set	26h
-rcon	equ	epsln*140h
+rcon	equ	eplsn*140h
 vcon1	equ	(5*vcon)/7
 fire:	ldblx	gepnt	;dispatch table entry for ship
 	inx	h
@@ -797,7 +797,7 @@ rot:	loadx	a,hflag
 ;  schedule ship start after hdly
 	ldblx	pepnt	;ship start entry
 	mvi	m,-1
-	lda	time
+	lda	tick
 	adi	hdly
 	inx	h
 	mov	m,a
@@ -833,7 +833,7 @@ dins:	loadx	d,orent
 	ora	d	;insert new
 	mov	m,a
 ;  check if fire button on
-firck:	ldblk	bapnt	;button addr
+firck:	ldblx	bapnt	;button addr
 	mov	d,m	;button word
 	loadx	a,firem	;fire mask
 	ana	d

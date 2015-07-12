@@ -12,12 +12,12 @@ kinta	equ	10h	;kbrd int addr
 cinta	equ	18h	;rtc int addr
 kintc	equ	0ffc0h	;kbrd int conrol addr
 kdcod	equ	44h	;keyboard decoder addr
-time	equ	3fh
+tick	equ	3fh
 	org	kinta	;keyboard interrupt
 	jmp	kbent	;handler addr
 	org	cinta	;rtc interrupt
 	jmp	cent	;clock handler
-	org	time
+	org	tick
 	db	0
 	org	kdcod
 	dw	kbdum	;dummy kb decoder
@@ -30,7 +30,7 @@ cent:	push	psw
 	push	b
 	push	d
 	push	h	;save all regs
-	lxi	h,time
+	lxi	h,tick
 	inr	m	;increment time
 	ei		;enable interrupt
 	call	exec	;call executive
